@@ -61,9 +61,9 @@ int main()
 	namedWindow("相减后", 0);
 	namedWindow("background_result_2", 0);
 
-	//VideoCapture capture("G://学习2//2016-10-2-OPENCV//2017-1-15-张迎港资料//一些素材//12.3//WIN_20161203_00_52_00_Pro.mp4");//G:/学习2/2016-10-2-OPENCV/2017-1-15-张迎港资料/一些素材/12.3/WIN_20161203_00_45_14_Pro   WIN_20161203_00_52_00_Pro Video_2017-02-15_194658.wmv
+	VideoCapture capture("G://学习2//2016-10-2-OPENCV//2017-1-15-张迎港资料//一些素材//12.3//WIN_20161203_00_52_00_Pro.mp4");//G:/学习2/2016-10-2-OPENCV/2017-1-15-张迎港资料/一些素材/12.3/WIN_20161203_00_45_14_Pro   WIN_20161203_00_52_00_Pro Video_2017-02-15_194658.wmv
 	//VideoCapture capture("G:/学习2/2017-2-25-仿生发射视频/Video_2017-02-25_114413.wmv");//   
-	VideoCapture capture("G:/学习2/2017-1-17-免驱摄像头图像目录/2017-1-17-capture-/20170302181622.avi");
+	//VideoCapture capture("G:/学习2/2017-1-17-免驱摄像头图像目录/2017-1-17-capture-/20170302181622.avi");
 	//t = (double)getTickCount();
 	//VideoCapture capture(1);
 	setMouseCallback("原图", on_MouseHandle, (void*)&frame);
@@ -307,7 +307,7 @@ int main()
 
 
 		//注释掉即为背景侦察法。不注释就是帧差法。
-		//gray_image.copyTo(background);
+		gray_image.copyTo(background);
 
 		// 看膨胀后的效果
 		//morphologyEx(rimage, gray_image_p, MORPH_DILATE, getStructuringElement(MORPH_RECT, Size(3, 3)));//膨胀  
@@ -447,33 +447,35 @@ int main()
 			y = Rect_1.y + (Rect_1.height / 2);
 			cout << "中心坐标为:" << x << "  " << y << endl;
 			//画出要进行颜色判断的区域
-			Rect Rect_2((Rect_1.x - (Rect_1.width / 2)), (Rect_1.y - (Rect_1.height / 2)), Rect_1.width * 2, Rect_1.height * 2);
-			rectangle(roi_image, Rect_2, Scalar(0, 0, 255), 2, 8);
+			//Rect Rect_2((Rect_1.x - 50), (Rect_1.y - 50)), Rect_1.width * 2, Rect_1.height * 2);
+			//rectangle(roi_image, Rect_2, Scalar(0, 0, 255), 2, 8);
 			//定义变量
 			int Roi_Rows_j_start, Roi_Rows_j_end, Roi_Cols_i_start, Roi_Cols_i_end;
 			//赋初值
-			Roi_Rows_j_start = Rect_2.y;
-			Roi_Rows_j_end = Rect_2.y + Rect_2.height;
-			Roi_Cols_i_start = Rect_2.x;
-			Roi_Cols_i_end = Rect_2.x + Rect_2.width;
+			Roi_Rows_j_start = y-70;
+			Roi_Rows_j_end =   y+70;
+			Roi_Cols_i_start = x-70;
+			Roi_Cols_i_end =   x+70;
+			
 			//判断是否超界
-			if (Rect_2.x < 0)
+			if (Roi_Cols_i_start < 0)
 			{
 				Roi_Cols_i_start = 0;
 			}
-			if ((Rect_2.x + Rect_2.width) >(rimage.cols - 1))
+			if (Roi_Cols_i_end >(rimage.cols - 1))
 			{
 				Roi_Cols_i_end = (rimage.cols - 1);
 			}
-			if (Rect_2.y < 0)
+			if (Roi_Rows_j_start < 0)
 			{
 				Roi_Rows_j_start = 0;
 			}
-			if ((Rect_2.y + Rect_2.height) >(rimage.rows - 1))
+			if (Roi_Rows_j_end >(rimage.rows - 1))
 			{
 				Roi_Rows_j_end = (rimage.rows - 1);
 			}
-
+			Rect Rect_2(Roi_Cols_i_start, Roi_Rows_j_start, Roi_Cols_i_end - Roi_Cols_i_start, Roi_Rows_j_end - Roi_Rows_j_start);
+			rectangle(roi_image, Rect_2, Scalar(0, 0, 255), 2, 8);
 			for (int i = Roi_Rows_j_start; i <Roi_Rows_j_end; i++)
 			{
 				uchar* rimage_data_2 = rimage.ptr<uchar>(i);//此时rimage已经二值化
