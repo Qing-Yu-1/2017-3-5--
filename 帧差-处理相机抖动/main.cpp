@@ -16,7 +16,7 @@
 using namespace cv;
 using namespace std;
 
-# define G_NUM_BACKGROUND 5//5 最大63帧
+# define G_NUM_BACKGROUND 5//
 # define G_YUZHI 20
 typedef struct tagSIZE
 {
@@ -24,7 +24,7 @@ typedef struct tagSIZE
 	int y;
 } ROI_SIZE;
 
-ROI_SIZE ROI = { 300, 200 };//   200, 100  400, 175
+ROI_SIZE ROI = { 300, 200 };//   
 Rect Rect_ROI(100, 150, ROI.x, ROI.y);
 Rect Rect_1;
 RotatedRect Rect_2;
@@ -36,7 +36,6 @@ int main()
 	Mat frame, frame_2, frame_3, gray_image, roi_image, rimage, f_image, gray_image_p, gray_image_threshold;
 	Mat background, background_1, background_2, background_3, background_result_1, background_result_2;
 	Mat histogramImage;//用来显示投影
-	//IplImage  *background_result_11, *background_result_22;//
 	vector<Mat>  roi_image_channels;
 	vector<vector<Point>> contours;
 	vector<Point> maxcontours;
@@ -44,35 +43,27 @@ int main()
 	vector<Point>Central_Point;
 	unsigned int maxnum = 0;
 	int num_frame_1 = 1;
-
 	double fps;
 	double t;
 	char str[50];
-	
 	Point Goal = { 0, 0 };
 	Point SecondContours_centroid = { 0, 0 };
 	Point Final_centroid;
 	int key;
 	int g_n1 = 3, k = 0;//g_n1 平移的像素点数，n*2
 	//int g_ColHeight[500] = { 0 };// 统计高度的数组指针
-	int *g_ColHeight = new int[500];
-	//memset(g_ColHeight, 0, background_result_1.cols * 4);
+	int *g_ColHeight = new int[500];//没有释放
 	int g_ColHeightLong = 0;//统计投影长度
 	int Colour_Change = 0;
 	namedWindow("原图", 0);
 	namedWindow("处理区域", 0);
 	namedWindow("结果", 0);
 	namedWindow("相减后", 0);
-	/*namedWindow("膨胀后", 0);*/
-	//namedWindow("当前ROI原图二值化图", 0);
 	namedWindow("background_result_2", 0);
-	/*namedWindow("background_2", 0);
-	namedWindow("background_3", 0);*/
-	//VideoCapture capture(0);
-	//background_1, background_2, background_3;
-	//"G:/学习2/2017-1-17-免驱摄像头图像目录/2017-1-17-capture-/2017-0214-19-46-04.avi"
-	VideoCapture capture("G://学习2//2016-10-2-OPENCV//2017-1-15-张迎港资料//一些素材//12.3//WIN_20161203_00_52_00_Pro.mp4");//G:/学习2/2016-10-2-OPENCV/2017-1-15-张迎港资料/一些素材/12.3/WIN_20161203_00_45_14_Pro   WIN_20161203_00_52_00_Pro Video_2017-02-15_194658.wmv
-	//VideoCapture capture("G:/学习2/2017-2-25-仿生发射视频/Video_2017-02-25_114413.wmv");//   Video_2017-02-25_172203.wmv
+
+	//VideoCapture capture("G://学习2//2016-10-2-OPENCV//2017-1-15-张迎港资料//一些素材//12.3//WIN_20161203_00_52_00_Pro.mp4");//G:/学习2/2016-10-2-OPENCV/2017-1-15-张迎港资料/一些素材/12.3/WIN_20161203_00_45_14_Pro   WIN_20161203_00_52_00_Pro Video_2017-02-15_194658.wmv
+	//VideoCapture capture("G:/学习2/2017-2-25-仿生发射视频/Video_2017-02-25_114413.wmv");//   
+	VideoCapture capture("G:/学习2/2017-1-17-免驱摄像头图像目录/2017-1-17-capture-/20170302181622.avi");
 	//t = (double)getTickCount();
 	//VideoCapture capture(1);
 	setMouseCallback("原图", on_MouseHandle, (void*)&frame);
@@ -106,10 +97,10 @@ int main()
 		roi_image = frame(Rect_ROI);//注意3个Rect一定要相等 Rect(200 , 300 , ROI.x, ROI.y) Rect_ROI
 		if (background_result_2.empty())
 		{
-			/*cvCreateImage(roi_image.size, roi_image.depth, roi_image.Channels);*/
+
 			background_result_2.create(roi_image.rows, roi_image.cols, CV_8UC1);
 			background_result_2.operator = (0);
-			//background_result_22 = &(background_result_2.operator IplImage());
+
 		}
 		cvtColor(roi_image, gray_image, CV_BGR2GRAY);
 		if (background_1.empty())
@@ -121,11 +112,10 @@ int main()
 		gray_image.copyTo(background_1);
 		imshow("背景相减后", background_result_1);
 
-		//background_result_11 = &(background_result_1.operator IplImage());
-		//cvShowImage("background_result_11", background_result_11);
+
 
 		//将background_result_1进行水平投影
-		//给指针g_ColHeight指向的数组指定大小
+
 		//数组清零 
 		memset(g_ColHeight, 0, background_result_1.cols * 4);
 		int value;
@@ -165,8 +155,7 @@ int main()
 			}
 		}
 		cout << "投影长度" << g_ColHeightLong << endl;
-		/*background_result_1.copyTo(background_result_2);*/
-		//cvAdd(background_result_11, background_result_22, background_result_22);
+
 		if (g_ColHeightLong > background_result_1.cols / 2)//
 		{
 			addWeighted(background_result_1, 1, background_result_2,
@@ -184,7 +173,7 @@ int main()
 				1, 0, background_result_2);
 		}
 
-		//morphologyEx(background_result_2, background_result_2, MORPH_DILATE, getStructuringElement(MORPH_RECT, Size(3, 3)));//膨胀  
+
 
 
 
@@ -197,9 +186,7 @@ int main()
 	}
 	threshold(background_result_2, background_result_2, 50, 255, THRESH_BINARY);//将差值进行二值化。
 	imshow("background_result_2", background_result_2);
-	//imwrite("1.bmp" , background_result_2);
-	//t = ((double)getTickCount() - t) / getTickFrequency();
-	//cvtColor(roi_image, gray_image, CV_BGR2GRAY);
+
 	//*************************************************************************
 	for (;;)
 	{
@@ -227,19 +214,23 @@ int main()
 		}
 		//由于相机拍摄的噪声主要是高斯分布，所以采用高斯滤波。
 		//GaussianBlur(gray_image, gray_image, Size(3, 3), 0, 0);
+
+		//morphologyEx(background, background, MORPH_ERODE, getStructuringElement(MORPH_RECT, Size(5, 5)));//腐蚀
+		//morphologyEx(background, background, MORPH_DILATE, getStructuringElement(MORPH_RECT, Size(5, 5)));//膨胀  
+
+		//gray_image-background的灰度图）的绝对值
 		absdiff(background, gray_image, rimage);//		帧差法关键步骤
 		// 对得到的前景进行阈值选取，去掉伪前景
+
+
 		threshold(rimage, rimage, 10, 255, THRESH_BINARY);//将差值进行二值化。
 		imshow("帧差后", rimage);
-	
+		/*imshow("相减后1", rimage);*/
 		//遍历各个像素，将由于抖动的背景轮廓去除，结合彩色信息还原飞盘像素点  一个关键步骤
 
 		//t = (double)getTickCount();  roi_image.at<Vec3b>(i, j)[0]
 		////****************************************************************************************************
-		////2017-3-2
-		////k = 0;
-		////jj = 0;
-		////Colour_Change = 0;
+
 		for (int i = 0; i < rimage.rows; i++)
 		{
 			uchar* rimage_data = rimage.ptr<uchar>(i);//此时rimage已经二值化
@@ -272,7 +263,7 @@ int main()
 					cout << red << endl;
 
 					}*/
-					//rimage_data[j] = 0;
+					//灰色信息判断
 					//if ((roi_image_data_blue[j]>88 && roi_image_data_blue[j]<110) && (roi_image_data_green[j]>85 && roi_image_data_green[j]<110) && (roi_image_data_red[j]>50 && roi_image_data_red[j]<92) )
 					//{
 					//	rimage_data[j] = 255;
@@ -294,19 +285,17 @@ int main()
 						rimage_data[j] = 0;
 				}
 				if (
-					//(rimage.at<char>(i, j) - background_result_2.at<char>(i, j))>G_YUZHI
-					(rimage_data[j] - background_result_2_data[j])>G_YUZHI
+
+					(rimage_data[j] - background_result_2_data[j])>G_YUZHI//大于就行了
 					)
-					//rimage.at<char>(i, j) = 255;
+
 					rimage_data[j] = 255;
-				//k++;
+
 			}
 
 		}
 
-		/*cout << k << endl;
-		cout << "~~~~~~~~~~~" ;
-		cout << Colour_Change << endl;*/
+
 		//****************************************************************************************************
 
 		imshow("相减后", rimage);
@@ -315,9 +304,7 @@ int main()
 		imshow("绿色通道", roi_image_channels[1]);
 		imshow("蓝色通道", roi_image_channels[0]);*/
 
-		//将当前灰度图二值化
-		//threshold(gray_image, gray_image_threshold, 30, 255, THRESH_BINARY);//将差值进行二值化。
-		//imshow("当前ROI原图二值化图", gray_image_threshold);
+
 
 		//注释掉即为背景侦察法。不注释就是帧差法。
 		//gray_image.copyTo(background);
@@ -337,9 +324,6 @@ int main()
 		rimage.copyTo(f_image);
 
 		findContours(f_image, contours, CV_RETR_EXTERNAL, CHAIN_APPROX_NONE, Point(0, 0));
-
-
-
 
 		cout << "第" << num_frame_1 << "张图" << "找到" << contours.size() << "个轮廓" << endl;
 		//筛选出最大的轮廓addWeighted
@@ -449,7 +433,7 @@ int main()
 		}
 		}
 		}*/
-		//CvRect rect = cvBoundingRect(maxcontours, 0);
+
 
 		if (maxcontours.size() >60)
 		{
